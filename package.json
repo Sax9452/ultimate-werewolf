@@ -1,0 +1,22 @@
+{
+  "name": "werewolf-online",
+  "version": "1.0.0",
+  "description": "Werewolf: Social Deception Royale - Next-Gen Multiplayer Experience",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start:prod": "npm install && cd server && npm install && cd ../client && npm install && npm run build && cd ../server && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
+
