@@ -1,0 +1,15 @@
+# Environment Variables สำหรับ Werewolf Game
+# คัดลอกไฟล์นี้เป็น .env และใส่ค่าจริง
+
+# Backend Environment Variables
+NODE_ENV=production
+PORT=3000
+
+# Spectator Mode Key (สำหรับ Admin/Monitoring)
+SPECTATOR_KEY=Sax51821924
+
+# Frontend Environment Variables  
+# ใช้ VITE_ prefix สำหรับ Vite
+VITE_API_URL=http://localhost:3000
+VITE_SPECTATOR_KEY=Sax51821924
+

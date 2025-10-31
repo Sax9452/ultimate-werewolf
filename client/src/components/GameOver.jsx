@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { socketService } from '../services/socket';
 import { soundManager } from '../utils/sounds';
+import { getRoleEmoji, getRoleTextColor, getRoleBadgeColor } from '../utils/roleHelpers';
 import { motion, AnimatePresence } from 'framer-motion';
 
 function GameOver({ onBackToHome }) {
@@ -31,39 +32,6 @@ function GameOver({ onBackToHome }) {
     return a.isAlive ? -1 : 1; // isAlive: true มาก่อน
   });
 
-  const getRoleEmoji = (role) => {
-    const emojis = {
-      'ชาวบ้าน': '👨‍🌾',
-      'มนุษย์หมาป่า': '🐺',
-      'หมอดู': '🔮',
-      'บอดี้การ์ด': '🛡️',
-      'นักล่า': '🏹',
-      'คิวปิด': '💘',
-      'ลูกหมาป่า': '🐺',
-      'ผู้ทรยศ': '🗡️',
-      'แม่มด': '🧙‍♀️',
-      'ตัวตลก': '🤡',
-      'อัลฟ่ามนุษย์หมาป่า': '👑🐺'
-    };
-    return emojis[role] || '❓';
-  };
-
-  const getRoleColor = (role) => {
-    const colors = {
-      'ชาวบ้าน': 'text-green-400',
-      'มนุษย์หมาป่า': 'text-red-400',
-      'หมอดู': 'text-purple-400',
-      'บอดี้การ์ด': 'text-blue-400',
-      'นักล่า': 'text-amber-400',
-      'คิวปิด': 'text-pink-400',
-      'ลูกหมาป่า': 'text-red-500',
-      'ผู้ทรยศ': 'text-gray-400',
-      'แม่มด': 'text-purple-500',
-      'ตัวตลก': 'text-green-300',
-      'อัลฟ่ามนุษย์หมาป่า': 'text-red-600'
-    };
-    return colors[role] || 'text-gray-400';
-  };
 
   const handlePlayAgain = () => {
     // ⭐ ส่ง event ให้ server รีเซ็ต lobby
@@ -157,7 +125,7 @@ function GameOver({ onBackToHome }) {
                 </div>
 
                 {/* บทบาท */}
-                <div className={`${getRoleColor(player.role)} font-semibold text-sm`}>
+                <div className={`${getRoleTextColor(player.role)} font-semibold text-sm`}>
                   {player.role}
                 </div>
 

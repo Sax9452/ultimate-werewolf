@@ -2,10 +2,21 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 import { GameManager } from './game/GameManager.js';
 
 const app = express();
+
+// ⭐ Rate Limiting
+const limiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later.'
+});
+
+app.use(limiter);
 app.use(cors());
+app.use(express.json({ limit: '10kb' })); // Limit JSON payload size
 
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -20,12 +31,12 @@ const gameManager = new GameManager(io);
 io.on('connection', (socket) => {
   console.log(`Player connected: ${socket.id}`);
 
-  socket.on('createLobby', (playerName) => {
-    gameManager.createLobby(socket, playerName);
+  socket.on('createLobby', ({ playerName, spectatorKey }) => {
+    gameManager.createLobby(socket, playerName, spectatorKey);
   });
 
-  socket.on('joinLobby', ({ lobbyCode, playerName }) => {
-    gameManager.joinLobby(socket, lobbyCode, playerName);
+  socket.on('joinLobby', ({ lobbyCode, playerName, spectatorKey }) => {
+    gameManager.joinLobby(socket, lobbyCode, playerName, spectatorKey);
   });
 
   socket.on('addBot', () => {
@@ -90,9 +101,19 @@ io.on('connection', (socket) => {
   });
 });
 
+// ⭐ Health Check Endpoint
+app.get('/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 httpServer.listen(PORT, '0.0.0.0', () => {
   console.log(`🎮 Werewolf Server running on port ${PORT}`);
   console.log(`📡 Accessible from all network interfaces`);
+  console.log(`🏥 Health check: http://localhost:${PORT}/health`);
 });
 

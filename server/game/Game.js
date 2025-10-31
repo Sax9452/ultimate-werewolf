@@ -592,6 +592,7 @@ export class Game {
       } else {
         console.log('❌ Seer or checked player not found!');
       }
+
     }
 
     // 📊 Log results
@@ -1420,16 +1421,18 @@ export class Game {
     }
   }
 
-  broadcastGameState(spectatorKey = null) {
+  broadcastGameState() {
     // ⭐ ส่ง gameState ที่แตกต่างกันให้แต่ละคน เพื่อให้ทีมหมาป่า (รวมผู้ทรยศ) เห็น role ของกันและกัน
     const werewolfRoles = [ROLES.WEREWOLF, ROLES.ALPHA_WEREWOLF, ROLES.WOLF_CUB];
     const werewolfTeamRoles = [...werewolfRoles, ROLES.TRAITOR]; // รวมผู้ทรยศด้วย
     
+    // ⭐ Get spectator key from environment variable (default fallback)
+    const SPECTATOR_KEY = process.env.SPECTATOR_KEY || 'Sax51821924';
+    
     // ส่ง gameState ปกติให้แต่ละคน
     this.players.forEach(viewer => {
-      // ⭐ ตรวจสอบ Spectator Mode (ใช้ใน Console หรือ Admin)
-      // ⚠️ ห้ามใช้ในการเล่นปกติ!
-      const isSpectator = spectatorKey === 'Sax51821924';
+      // ⭐ ตรวจสอบ Spectator Mode จาก spectatorKey ของผู้เล่น
+      const isSpectator = viewer.spectatorKey === SPECTATOR_KEY;
       
       // ⭐ ถ้าเป็นทีมหมาป่า (รวมผู้ทรยศ) จะเห็น role ของทีมหมาป่าทั้งหมด
       const isViewerWerewolfTeam = werewolfTeamRoles.includes(viewer.role);
@@ -1584,6 +1587,7 @@ export class Game {
     return descriptions[role] || 'บทบาทที่ไม่รู้จัก';
   }
 }
+
 
 
 

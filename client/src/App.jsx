@@ -14,12 +14,13 @@ function App() {
   const [isSpectatorMode, setIsSpectatorMode] = useState(false);
 
   useEffect(() => {
-    // ตรวจสอบ Spectator Mode จาก URL parameter
+    // ⭐ ตรวจสอบ Spectator Mode จาก URL parameter (ใช้ env var จาก Vite)
     const urlParams = new URLSearchParams(window.location.search);
     const spectatorKey = urlParams.get('key');
-    if (spectatorKey === 'Sax51821924') {
-      setIsSpectatorMode(true);
-      console.log('🔑 Spectator Mode Activated!');
+    
+    if (spectatorKey) {
+      sessionStorage.setItem('spectatorKey', spectatorKey);
+      console.log('🔑 Spectator key detected:', spectatorKey);
     }
     
     socketService.connect();
@@ -72,7 +73,11 @@ function App() {
 
     socketService.on('gameState', (state) => {
       console.log('🎮 Game State:', state);
-      setGameState({ ...state, isGameActive: true });
+      setGameState({ 
+        ...state, 
+        isGameActive: true,
+        isSpectatorMode: state.isSpectatorMode || false // ⭐ รับ spectator mode จาก server
+      });
       setCurrentView('game');
     });
 
@@ -112,7 +117,7 @@ function App() {
       case 'lobby':
         return <Lobby />;
       case 'game':
-        return <Game isSpectator={isSpectatorMode} />;
+        return <Game />;
       case 'gameOver':
         return <GameOver onBackToHome={() => setCurrentView('home')} />;
       default:

@@ -9,7 +9,7 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-    healthCheckPath: /
+    healthCheckPath: /health
 
   # Frontend Client
   - type: web

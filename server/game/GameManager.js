@@ -10,7 +10,7 @@ export class GameManager {
     this.botCounter = 0;
   }
 
-  createLobby(socket, playerName) {
+  createLobby(socket, playerName, spectatorKey = null) {
     // สร้างโค้ดห้องเป็นตัวเลข 5 หลัก (10000-99999) และตรวจสอบว่าไม่ซ้ำ
     let lobbyCode;
     do {
@@ -24,7 +24,8 @@ export class GameManager {
         id: socket.id,
         name: playerName,
         ready: true,
-        isBot: false
+        isBot: false,
+        spectatorKey: spectatorKey // ⭐ เก็บ spectator key
       }],
       maxPlayers: 30, // ⭐ จำกัดที่ 30 คน (สมดุล)
       minPlayers: 3,
@@ -158,7 +159,7 @@ export class GameManager {
     console.log(`Bot removed: ${botId} from lobby ${lobbyCode}`);
   }
 
-  joinLobby(socket, lobbyCode, playerName) {
+  joinLobby(socket, lobbyCode, playerName, spectatorKey = null) {
     const lobby = this.lobbies.get(lobbyCode);
 
     if (!lobby) {
@@ -191,7 +192,8 @@ export class GameManager {
       id: socket.id,
       name: playerName,
       ready: false,
-      isBot: false
+      isBot: false,
+      spectatorKey: spectatorKey // ⭐ เก็บ spectator key
     };
 
     lobby.players.push(player);

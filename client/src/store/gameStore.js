@@ -20,6 +20,7 @@ export const useGameStore = create((set) => ({
   roleAcknowledgements: { total: 0, acknowledged: 0, waiting: 0 }, // จำนวนผู้เล่นที่ยืนยันแล้ว
   showRoleChangeNotification: false, // แสดงการแจ้งเตือนเมื่อ role เปลี่ยน
   roleChangeMessage: null, // ข้อความแจ้งเตือนเมื่อ role เปลี่ยน
+  isSpectatorMode: false, // ⭐ Spectator mode - เห็น role ทุกคน
   
   setGameState: (state) => set((prevState) => ({ ...prevState, ...state })),
   

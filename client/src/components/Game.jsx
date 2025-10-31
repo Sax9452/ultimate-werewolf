@@ -3,13 +3,14 @@ import { useGameStore } from '../store/gameStore';
 import { socketService } from '../services/socket';
 import { motion, AnimatePresence } from 'framer-motion';
 import { soundManager } from '../utils/sounds';
+import { getRoleEmoji, getRoleColor, getRoleTextColor } from '../utils/roleHelpers';
 import Chat from './Chat';
 import WerewolfChat from './WerewolfChat';
 import PlayerList from './PlayerList';
 import GameLog from './GameLog';
 import NightActions from './NightActions';
 
-function Game({ isSpectator = false }) {
+function Game() {
   const { 
     phase, 
     day, 
@@ -25,7 +26,8 @@ function Game({ isSpectator = false }) {
     roleAcknowledgements,
     showRoleChangeNotification,
     roleChangeMessage,
-    setGameState
+    setGameState,
+    isSpectatorMode // ⭐ รับ spectator mode จาก gameState
   } = useGameStore();
 
   // State สำหรับ Hunter Revenge
@@ -183,39 +185,6 @@ function Game({ isSpectator = false }) {
     }
   }, [phase, day]);
 
-  const getRoleColor = (role) => {
-    const colors = {
-      'ชาวบ้าน': 'from-green-500 to-emerald-500',
-      'มนุษย์หมาป่า': 'from-red-500 to-rose-500',
-      'หมอดู': 'from-purple-500 to-violet-500',
-      'บอดี้การ์ด': 'from-blue-500 to-cyan-500',
-      'นักล่า': 'from-amber-500 to-orange-500',
-      'คิวปิด': 'from-pink-500 to-rose-500',
-      'ลูกหมาป่า': 'from-red-600 to-red-700',
-      'ผู้ทรยศ': 'from-gray-700 to-gray-800',
-      'แม่มด': 'from-purple-600 to-purple-700',
-      'ตัวตลก': 'from-green-400 to-emerald-400',
-      'อัลฟ่ามนุษย์หมาป่า': 'from-red-700 to-red-900'
-    };
-    return colors[role] || 'from-gray-500 to-slate-500';
-  };
-
-  const getRoleEmoji = (role) => {
-    const emojis = {
-      'ชาวบ้าน': '👨‍🌾',
-      'มนุษย์หมาป่า': '🐺',
-      'หมอดู': '🔮',
-      'บอดี้การ์ด': '🛡️',
-      'นักล่า': '🏹',
-      'คิวปิด': '💘',
-      'ลูกหมาป่า': '🐺',
-      'ผู้ทรยศ': '🗡️',
-      'แม่มด': '🧙‍♀️',
-      'ตัวตลก': '🤡',
-      'อัลฟ่ามนุษย์หมาป่า': '👑🐺'
-    };
-    return emojis[role] || '❓';
-  };
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -763,7 +732,7 @@ function Game({ isSpectator = false }) {
 
       <div className="max-w-7xl mx-auto">
         {/* Spectator Badge */}
-        {isSpectator && (
+        {isSpectatorMode && (
           <motion.div
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -845,7 +814,7 @@ function Game({ isSpectator = false }) {
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
             {/* Players */}
-            <PlayerList isSpectator={isSpectator} />
+            <PlayerList />
 
             {/* Actions Panel */}
             {phase === 'night' && (

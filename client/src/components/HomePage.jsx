@@ -47,7 +47,10 @@ function HomePage() {
     soundManager.playClick();
     setPlayerName(localName);
     setErrorMessage(''); // ล้าง error
-    socketService.emit('createLobby', localName);
+    
+    // ⭐ ส่ง spectatorKey ถ้ามี
+    const spectatorKey = sessionStorage.getItem('spectatorKey');
+    socketService.emit('createLobby', { playerName: localName, spectatorKey });
   };
 
   const handleJoinLobby = () => {
@@ -70,7 +73,14 @@ function HomePage() {
     soundManager.playClick();
     setPlayerName(localName);
     setErrorMessage(''); // ล้าง error
-    socketService.emit('joinLobby', { lobbyCode: lobbyCode.toUpperCase(), playerName: localName });
+    
+    // ⭐ ส่ง spectatorKey ถ้ามี
+    const spectatorKey = sessionStorage.getItem('spectatorKey');
+    socketService.emit('joinLobby', { 
+      lobbyCode: lobbyCode.toUpperCase(), 
+      playerName: localName, 
+      spectatorKey 
+    });
   };
 
   return (

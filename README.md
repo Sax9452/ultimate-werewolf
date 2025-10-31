@@ -2,7 +2,7 @@
 
 เกมมนุษย์หมาป่าแบบเรียลไทม์ ออนไลน์ มัลติเพลย์เยอร์ รองรับภาษาไทย 100% พร้อมระบบ AI Bot ที่ฉลาดและระบบตั้งค่าห้องแบบครบครัน
 
-![Version](https://img.shields.io/badge/version-2.0.0-purple)
+![Version](https://img.shields.io/badge/version-2.0.1-purple)
 ![Platform](https://img.shields.io/badge/platform-Web%20%7C%20Cross--Platform-blue)
 ![Language](https://img.shields.io/badge/language-ไทย%20100%25-green)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
@@ -130,7 +130,9 @@ npm run client
 3. Import repository
 4. Render จะอ่านไฟล์ `render.yaml` และ deploy อัตโนมัติ
 
-📖 **คู่มือละเอียด**: อ่านได้ที่ [DEPLOYMENT.md](./DEPLOYMENT.md)
+💡 **Tip**: ตั้งค่า Environment Variables:
+- Backend: `SPECTATOR_KEY=your-secret-key-here`
+- Frontend: `VITE_SPECTATOR_KEY=your-secret-key-here`
 
 ## 🎨 Features
 

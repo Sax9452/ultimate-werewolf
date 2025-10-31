@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { socketService } from '../services/socket';
 import { soundManager } from '../utils/sounds';
+import { getRoleEmoji, getRoleBadgeColor } from '../utils/roleHelpers';
 import { motion } from 'framer-motion';
 import Chat from './Chat';
 import LobbySettings from './LobbySettings';
@@ -144,33 +145,6 @@ function Lobby() {
                   return (roleOrder[a[0]] || 999) - (roleOrder[b[0]] || 999);
                 });
                 
-                const roleEmojis = {
-                  'ชาวบ้าน': '👨‍🌾',
-                  'มนุษย์หมาป่า': '🐺',
-                  'อัลฟ่ามนุษย์หมาป่า': '👑🐺',
-                  'ลูกหมาป่า': '🐺',
-                  'ผู้ทรยศ': '🗡️',
-                  'หมอดู': '🔮',
-                  'บอดี้การ์ด': '🛡️',
-                  'แม่มด': '🧙‍♀️',
-                  'นักล่า': '🏹',
-                  'คิวปิด': '💘',
-                  'ตัวตลก': '🤡'
-                };
-                
-                const roleColors = {
-                  'ชาวบ้าน': 'bg-green-900/50 border-green-600 text-green-300',
-                  'มนุษย์หมาป่า': 'bg-red-900/50 border-red-600 text-red-300',
-                  'อัลฟ่ามนุษย์หมาป่า': 'bg-red-900/70 border-red-500 text-red-200',
-                  'ลูกหมาป่า': 'bg-red-900/50 border-red-600 text-red-300',
-                  'ผู้ทรยศ': 'bg-gray-900/50 border-gray-600 text-gray-300',
-                  'หมอดู': 'bg-purple-900/50 border-purple-600 text-purple-300',
-                  'บอดี้การ์ด': 'bg-blue-900/50 border-blue-600 text-blue-300',
-                  'แม่มด': 'bg-purple-900/60 border-purple-500 text-purple-200',
-                  'นักล่า': 'bg-orange-900/50 border-orange-600 text-orange-300',
-                  'คิวปิด': 'bg-pink-900/50 border-pink-600 text-pink-300',
-                  'ตัวตลก': 'bg-emerald-900/50 border-emerald-600 text-emerald-300'
-                };
                 
                 return (
                   <>
@@ -178,10 +152,10 @@ function Lobby() {
                       {sortedRoles.map(([role, count]) => (
                         <div 
                           key={role}
-                          className={`p-3 rounded-lg border ${roleColors[role] || 'bg-slate-700 border-slate-600 text-slate-300'}`}
+                          className={`p-3 rounded-lg border ${getRoleBadgeColor(role)}`}
                         >
                           <div className="flex items-center justify-between">
-                            <span className="text-2xl">{roleEmojis[role] || '❓'}</span>
+                            <span className="text-2xl">{getRoleEmoji(role)}</span>
                             <span className="text-xl font-bold">×{count}</span>
                           </div>
                           <div className="text-xs font-semibold mt-1 truncate">{role}</div>

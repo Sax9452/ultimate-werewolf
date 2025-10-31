@@ -2,10 +2,11 @@ import { useState, useEffect } from 'react';
 import { useGameStore } from '../store/gameStore';
 import { socketService } from '../services/socket';
 import { soundManager } from '../utils/sounds';
+import { getRoleEmoji, getRoleTextColor } from '../utils/roleHelpers';
 import { motion, AnimatePresence } from 'framer-motion';
 
-function PlayerList({ isSpectator = false }) {
-  const { players, phase, day, playerRole } = useGameStore();
+function PlayerList() {
+  const { players, phase, day, playerRole, isSpectatorMode } = useGameStore();
   const myId = socketService.socket?.id;
   const myPlayer = players.find(p => p.id === myId);
 
@@ -284,20 +285,20 @@ function PlayerList({ isSpectator = false }) {
                   ? 'line-through text-slate-500'
                   : isMe
                     ? 'text-green-400'
-                    : !isSpectator && !isMe && playerRole && player.role && isSameTeam(playerRole, player.role)
+                    : !isSpectatorMode && !isMe && playerRole && player.role && isSameTeam(playerRole, player.role)
                       ? 'text-red-400'
                       : ''
               }`}>
                 {player.name}
                 {isMe && ' (คุณ)'}
                 {/* ⭐ แสดง role ในวงเล็บถ้าเป็นพวกเดียวกัน (หมาป่า) */}
-                {!isSpectator && !isMe && playerRole && player.role && isSameTeam(playerRole, player.role) && (
+                {!isSpectatorMode && !isMe && playerRole && player.role && isSameTeam(playerRole, player.role) && (
                   <span className="text-red-300 text-sm"> ({player.role})</span>
                 )}
               </div>
 
               {/* Spectator Mode - แสดง Role ทุกคน */}
-              {isSpectator && player.role && (
+              {isSpectatorMode && player.role && (
                 <div className="text-xs mb-1">
                   <span className="px-2 py-0.5 rounded bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold">
                     {player.role}
